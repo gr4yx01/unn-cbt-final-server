@@ -1,0 +1,17 @@
+{
+  "name": "unn-cbt-final-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:gr4yx01/unn-cbt-final-server.git",
+  "author": "gr4yx01 <hoyx0101@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "argon2": "^0.41.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.1.0",
+    "tsx": "^4.19.2"
+  }
+}
