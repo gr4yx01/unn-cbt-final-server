@@ -1,0 +1,13 @@
+- [] login
+- [] register
+- Admin
+- [] Create Exam
+- [] Add Questions
+- [] Set limit
+- [] see list of student who took exam
+- [] update question
+- [] 
+- Student
+- [] View List of Exams
+- [] Take Exam
+- [] View Report

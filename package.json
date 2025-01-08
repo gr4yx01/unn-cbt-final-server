@@ -5,8 +5,15 @@
   "repository": "git@github.com:gr4yx01/unn-cbt-final-server.git",
   "author": "gr4yx01 <hoyx0101@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "tsx --watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma": "npx prisma"
+  },
   "dependencies": {
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "argon2": "^0.41.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
