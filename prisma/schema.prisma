@@ -15,13 +15,12 @@ datasource db {
 
 enum Role {
   STUDENT
-  LECTURER
+  EXAMINER
 }
 
-enum QuestionType {
+enum ExamType {
   MULTIPLE_CHOICE
   TRUE_FALSE
-  SHORT_ANSWER
 }
 
 enum AnswerOption {
@@ -42,7 +41,6 @@ model Question {
   id      String   @id @default(cuid())
   title   String
   options Option[]
-  type   QuestionType
   answer AnswerOption
   exam    Exam     @relation(fields: [examId], references: [id])
   examId  String
@@ -53,15 +51,19 @@ model Exam{
   title       String
   description String
   duration    Int
+  Examiner    Examiner  @relation(fields: [ExaminerId], references: [id])
+  ExaminerId  String
+  examType    ExamType
   questions   Question[]
   User User[]
   ExamTaken ExamTaken[]
 }
 
-model Lecturer {
+model Examiner {
   id       String @id @default(cuid())
   staff_code String @unique
   password String
+  exams    Exam[]
   role     Role
 }
 
@@ -71,6 +73,7 @@ model User {
   password String
   role     Role
   exams    Exam[]
+  ExamTaken ExamTaken[]
 }
 
 model ExamTaken {
