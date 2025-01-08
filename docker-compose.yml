@@ -7,6 +7,6 @@ services:
       POSTGRES_USER: kossy    # Database user
       POSTGRES_PASSWORD: clear  # Database password
     ports:
-      - "4005:5432"  # Map host port 5432 to container port 5432
+      - "4005:5432"  # Map host port 4005 to container port 5432
     # volumes:
     #   - postgres_data: /var/lib/postgresql/data

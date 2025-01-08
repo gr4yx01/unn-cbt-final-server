@@ -3,10 +3,10 @@
 - Admin
 - [] Create Exam
 - [] Add Questions
-- [] Set limit
-- [] see list of student who took exam
+- [] Set time limit
+- [] see list of student who took exams
 - [] update question
-- [] 
+
 - Student
 - [] View List of Exams
 - [] Take Exam
