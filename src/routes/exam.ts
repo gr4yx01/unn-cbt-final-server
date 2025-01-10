@@ -6,7 +6,7 @@ const examRouter = Router()
 
 examRouter.get('/examiner', getExaminerPublishedExams)
 examRouter.get('/student', getStudentWrittenExams)
-examRouter.post('/:id', createExam)
+examRouter.post('/', verifyToken, isExaminer, createExam)
 examRouter.get('/:id/participate', participateInExam)
 examRouter.post('/:id/submit', submitExam)
 

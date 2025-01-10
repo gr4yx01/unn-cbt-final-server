@@ -4,11 +4,12 @@ import jwt from 'jsonwebtoken'
 declare module 'express-serve-static-core' {
     interface Request {
       role?: string;
+      userId?: string;
     }
   }
 
 const isExaminer = (req: any, res: Response, next: NextFunction) => {
-    const userRole = req?.userRole; // Get the user's role from the request
+    const userRole = req?.role; // Get the user's role from the request
 
   // Check if the user is an examiner
   if (userRole === 'EXAMINER') {
@@ -40,13 +41,12 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
         }else {
             const verified = jwt.verify(token, secret);
             req.role = (verified as jwt.JwtPayload)?.role
+            req.userId = (verified as jwt.JwtPayload)?.userId
             next();
         }
     } catch (err) {
       res.status(400).send('Invalid Token');
-  
     }
-  
   };
 
 export {
