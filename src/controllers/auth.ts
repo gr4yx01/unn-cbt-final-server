@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
 import { prisma } from "../db"
 import * as argon from 'argon2'
-import { generateStaffCode } from "../helper"
+import { generateCode } from "../helper"
 import jwt from 'jsonwebtoken'
 
 const createExaminerAccount = async (req: Request, res: Response) => {
-    const { name, department, password } = req.body
+    const { name, department } = req.body
 
     try {
         const examinerExist = await prisma.examiner.findFirst({
@@ -22,15 +22,13 @@ const createExaminerAccount = async (req: Request, res: Response) => {
             return
         }
 
-        const hashedPassword = await argon.hash(password)
-        const staff_code = generateStaffCode()
+        const staff_code = generateCode()
 
         
         const examiner = await prisma.examiner.create({
             data: {
                 name: name,
                 department: department,
-                password: hashedPassword,
                 staff_code: String(staff_code)
             }
         })
@@ -45,7 +43,10 @@ const createExaminerAccount = async (req: Request, res: Response) => {
 
         if(secret) {
             const token = jwt.sign(payload, secret)
-            res.status(201).json(token)
+            res.status(201).json({
+                access_token: token,
+                staff_code: staff_code
+            })
         }
         
 
@@ -117,15 +118,6 @@ const loginAsExaminer = async (req: Request, res: Response) => {
         if(!examiner) {
             res.status(404).json({
                 message: 'Examiner not found'
-            })
-            return
-        }
-
-        const validPassword = await argon.verify(examiner.password, password)
-
-        if(!validPassword) {
-            res.status(401).json({
-                message: 'Invalid password'
             })
             return
         }

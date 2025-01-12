@@ -21,8 +21,20 @@ const isExaminer = (req: any, res: Response, next: NextFunction) => {
   }
 }
 
-const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
+const isStudent = (req: any, res: Response, next: NextFunction) => {
+  const userRole = req?.role; // Get the user's role from the request
 
+  // Check if the user is an examiner
+  if (userRole === 'STUDENT') {
+    // If the user is an examiner, proceed to the next middleware or route handler
+    next();
+  } else {
+    // If the user is not an examiner, deny access
+    res.status(403).json({ message: 'Access denied. Only Students are allowed.' });
+  }
+}
+
+const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
     const token = req.header('Authorization')?.split(' ')[1];
 
     if (!token) {
@@ -51,5 +63,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
 
 export {
     isExaminer,
+    isStudent,
     verifyToken
 }
