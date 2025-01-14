@@ -30,6 +30,9 @@ const getExaminerPublishedExams = async (req: Request, res: Response) => {
         const exams = await prisma.exam.findMany({
             where: {
                 ExaminerId: req.userId
+            },
+            include: {
+                ExamTaken: true
             }
         })
 
@@ -109,15 +112,59 @@ const participateInExam = async (req: Request, res: Response) => {
     }
 }
 
+const getExamParticipants = async (req: Request, res: Response) => {
+    const { id } = req.params
+    try {
+        const participants = await prisma.examTaken.findMany({
+            where: {
+                examId: id
+            }
+        })
+
+        res.status(200).json(participants)
+    } catch (err) {
+        res.status(500).json({
+            message: 'An error occurred'
+        })
+    }
+}
+
+const getExamDetail = async (req: Request, res: Response) => {
+    const { id } = req.params
+
+    try {
+        const exam  = await prisma.exam.findUnique({
+            where: {
+                id
+            },
+            include: {
+                ExamTaken: true,
+                questions: {
+                    include: {
+                        options: true
+                    }
+                }
+            }
+        })
+
+        res.status(200).json(exam)
+    } catch (err) {
+        res.status(500).json({
+            message: 'An error occurred'
+        })
+    }
+}
+
 const submitExam = async (req: Request, res: Response) => {
     const { score } = req.body
     const { id } = req.params
     
     try {
-        await prisma.examTaken.updateMany({
+        await prisma.examTaken.update({
             where: {
-                userId: req.userId,
-                examId: id
+                id
+                // userId: req.userId,
+                // examId: id
             },
             data: {
                 score
@@ -134,11 +181,58 @@ const submitExam = async (req: Request, res: Response) => {
     }
 }
 
+const fetchExam = async (req: Request, res: Response) => {
+    const { exam_code } = req.body
+    
+
+    try {
+        const examExist = await prisma.exam.findFirst({
+            where: {
+                exam_code: Number(exam_code)
+            }
+        })
+
+        const alreadyWritten = await prisma.examTaken.findFirst({
+            where: {
+                AND: {
+                    examId: examExist?.id,
+                    userId: req.userId
+                }
+            }
+        })
+
+
+        if(alreadyWritten !== null) {
+            res.status(400).json({
+                message: 'You have already written this exam'
+            })
+            return
+        }
+
+        const exam = await prisma.exam.findFirst({
+            where: {
+                exam_code: Number(exam_code)
+            }
+        })
+
+        res.status(200).json(exam)
+    } catch (err) {
+        res.status(500).json({
+            message: 'An error occurred',
+            error: err
+        })
+        console.log(err)
+    }
+}
+
 export {
     getExaminerPublishedExams,
     getStudentWrittenExams,
     createExam,
     participateInExam,
     submitExam,
-    getExamQuestions
+    getExamQuestions,
+    getExamDetail,
+    getExamParticipants,
+    fetchExam
 }

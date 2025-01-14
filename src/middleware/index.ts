@@ -42,22 +42,22 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
 
       return;
     }
-  
+
     try {
-        
         const secret = process.env.JWT_SECRET
         if(!secret) {
             res.status(404).json({
                 message: 'Jwt secret not found'
             })
         }else {
-            const verified = jwt.verify(token, secret);
-            req.role = (verified as jwt.JwtPayload)?.role
-            req.userId = (verified as jwt.JwtPayload)?.userId
+          const verified = jwt.verify(token, secret);
+          req.role = (verified as jwt.JwtPayload)?.role
+          req.userId = (verified as jwt.JwtPayload)?.userId
             next();
         }
     } catch (err) {
       res.status(400).send('Invalid Token');
+      console.log(err)
     }
   };
 
@@ -66,3 +66,9 @@ export {
     isStudent,
     verifyToken
 }
+
+/*
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiRVhBTUlORVIiLCJzdGFmZl9jb2RlIjoiNjczNDkiLCJ1c2VySWQiOiJjbTV0azlhemIwMDA0ZzF5M2M5MDlkNGhkIiwiaWF0IjoxNzM2ODQ1MDQwLCJleHAiOjE3MzY4ODEwNDB9.9WbItARP92rJIbZIV8oiM2dR8CT50lPgXZT9GzmsKfM
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiRVhBTUlORVIiLCJzdGFmZl9jb2RlIjoiNjczNDkiLCJ1c2VySWQiOiJjbTV0azlhemIwMDA0ZzF5M2M5MDlkNGhkIiwiaWF0IjoxNzM2ODQ1MDQwLCJleHAiOjE3MzY4ODEwNDB9.9WbItARP92rJIbZIV8oiM2dR8CT50lPgXZT9GzmsKfM
+*/

@@ -42,7 +42,9 @@ const createExaminerAccount = async (req: Request, res: Response) => {
         }
 
         if(secret) {
-            const token = jwt.sign(payload, secret)
+            const token = jwt.sign(payload, secret, {
+                expiresIn: '10h'
+            })
             res.status(201).json({
                 access_token: token,
                 staff_code: staff_code
@@ -95,8 +97,12 @@ const createStudentAccount = async (req: Request, res: Response) => {
         }
 
         if(secret) {
-            const token = jwt.sign(payload, secret)
-            res.status(201).json(token)
+            const token = jwt.sign(payload, secret, {
+                expiresIn: '10h'
+            })
+            res.status(201).json({
+                access_token: token
+            })
         }
     } catch (err) {
         res.status(500).json({
@@ -106,7 +112,7 @@ const createStudentAccount = async (req: Request, res: Response) => {
 }
 
 const loginAsExaminer = async (req: Request, res: Response) => {
-    const { staff_code, password } = req.body
+    const { staff_code } = req.body
 
     try {
         const examiner = await prisma.examiner.findFirst({
@@ -131,7 +137,9 @@ const loginAsExaminer = async (req: Request, res: Response) => {
         }
 
         if(secret) {
-            const token = jwt.sign(payload, secret)
+            const token = jwt.sign(payload, secret, {
+                expiresIn: '10h'
+            })
             res.status(200).json(token)
         }
     } catch (err) {
@@ -176,7 +184,9 @@ const loginAsStudent = async (req: Request, res: Response) => {
         }
 
         if(secret) {
-            const token = jwt.sign(payload, secret)
+            const token = jwt.sign(payload, secret, {
+                expiresIn: '10h'
+            })
             res.status(200).json(token)
         }
     } catch (err) {

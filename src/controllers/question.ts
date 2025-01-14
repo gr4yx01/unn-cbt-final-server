@@ -17,6 +17,8 @@ const createMultipleChoiceQuestion = async (req: Request, res: Response) => {
             }
         })
 
+        console.log('***')
+        
         // create options first
         options.forEach(async (option: string) => {
             await prisma.option.create({

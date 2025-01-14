@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { createExam, getExaminerPublishedExams, getExamQuestions, getStudentWrittenExams, participateInExam, submitExam } from "../controllers/exam";
+import { createExam, fetchExam, getExamDetail, getExaminerPublishedExams, getExamParticipants, getExamQuestions, getStudentWrittenExams, participateInExam, submitExam } from "../controllers/exam";
 import { isExaminer, verifyToken, isStudent } from "../middleware";
 
 const examRouter = Router()
 
 examRouter.get('/examiner', verifyToken, isExaminer, getExaminerPublishedExams)
+examRouter.get('/:id', verifyToken, isExaminer, getExamDetail)
+examRouter.get('/:id/participants', verifyToken, isExaminer, getExamParticipants)
+examRouter.post('/student', verifyToken, isStudent, fetchExam)
 examRouter.get('/student', verifyToken, isStudent, getStudentWrittenExams)
 examRouter.post('/', verifyToken, isExaminer, createExam)
 examRouter.get('/:id/participate', verifyToken, isStudent, participateInExam)
