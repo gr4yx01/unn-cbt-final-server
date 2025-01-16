@@ -39,14 +39,14 @@ const createMultipleChoiceQuestion = async (req: Request, res: Response) => {
     }
 }
 const createTrueFalseQuestion = async (req: Request, res: Response) => {
-    const { title, answer, options } = req.body
+    const { title, answer } = req.body
     const { id } = req.params
 
     try {
         await prisma.question.create({
             data: {
                 title,
-                answer: options[answer],
+                answer,
                 examId: id
             }
         })
